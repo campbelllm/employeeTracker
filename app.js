@@ -4,12 +4,21 @@ const connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : 'password',
-    database : 'greatBay_DB'
+    database : 'employeeTracker_db'
 });
 connection.connect(err => {
     if(err) throw err;
     start();
 });
+
+const allEmployees = () => {
+  const query = "SELECT * FROM employee";
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  })
+}
 
 const start = () => {
   inquirer.prompt({
