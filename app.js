@@ -18,7 +18,31 @@ const allEmployees = () => {
     console.table(res);
     start();
   })
-}
+};
+
+const employeesByDep = () =>{
+
+};
+
+const employeesByMan = () => {
+
+};
+
+const addEmployee = () => {
+  
+};
+
+const removeEmployee = () => {
+
+};
+
+const updateEmployeeRole = () => {
+
+};
+
+const updateEmployeeManager = () => {
+
+};
 
 const start = () => {
   inquirer.prompt({
