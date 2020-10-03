@@ -11,6 +11,8 @@ connection.connect(err => {
     start();
 });
 
+const queryJoin = "SELECT id FROM employee"
+
 const allEmployees = () => {
   const query = "SELECT * FROM employee";
   connection.query(query, (err, res) => {
@@ -21,7 +23,7 @@ const allEmployees = () => {
 };
 
 const employeesByDep = () =>{
-
+  const query = "SELECT"
 };
 
 const employeesByMan = () => {
@@ -29,6 +31,26 @@ const employeesByMan = () => {
 };
 
 const addEmployee = () => {
+  inquirer.prompt([
+    {
+      name: 'firstName',
+      type: "input",
+      message: "What is the employees first name?"
+    },
+    {
+      name: "lastName",
+      type: "input",
+      message: "What is the employees last name?"
+
+    }
+  ]).then(answer => {
+    const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`
+    connection.query(createEmployee, [answer.firstName, answer.lastName],(err,res) => {
+      if (err) throw err;
+      console.table(res)
+      start();
+    })
+  })
   
 };
 
