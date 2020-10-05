@@ -41,7 +41,18 @@ const addEmployee = () => {
       name: "lastName",
       type: "input",
       message: "What is the employees last name?"
-
+    },
+    {
+      name:"employeeRole",
+      type: "list",
+      message: "What is the employees role?",
+      choices: ["Director", "Administrator", "Shoe Shiner", "Assistant", "Receptionist", "Accountant"]
+    },
+    {
+      name: "employeeManager",
+      type: "list",
+      message: "Who is this employees manager?",
+      choices: ["Ron Swanson", "Leslie Knope", "Ben Wyatt", "Ann Perkins", "Chris Traeger" ]
     }
   ]).then(answer => {
     const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`
