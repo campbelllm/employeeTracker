@@ -46,7 +46,7 @@ const addEmployee = () => {
       name:"employeeRole",
       type: "list",
       message: "What is the employees role?",
-      choices: ["Director", "Administrator", "Shoe Shiner", "Assistant", "Receptionist", "Accountant"]
+      choices: 
     },
     {
       name: "employeeManager",
@@ -55,12 +55,24 @@ const addEmployee = () => {
       choices: ["Ron Swanson", "Leslie Knope", "Ben Wyatt", "Ann Perkins", "Chris Traeger" ]
     }
   ]).then(answer => {
-    const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`
+    const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`;
     connection.query(createEmployee, [answer.firstName, answer.lastName],(err,res) => {
       if (err) throw err;
-      console.table(res)
+     
+      // start();
+    });
+    const setRole = "INSERT INTO employee_role (title) VALUES (?);";
+    connection.query(setRole, answer.employeeRole, (err, res) => {
+      if (err) throw err;
+      
+    });
+    const setManager = "INSERT INTO manager (manager) VALUES (?);";
+    connection.query(setManager, answer.employeeManager, (err, res) => {
+      if (err) throw err;
+     
       start();
     })
+    
   })
   
 };
