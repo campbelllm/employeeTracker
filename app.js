@@ -48,9 +48,23 @@ const employeeList = () => {
 
 
 
-const employeesByDep = () =>{
-  const query = "SELECT"
+const allDepartments = () =>{
+  const query = "SELECT * FROM department";
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  })
 };
+
+const allRoles = () => {
+  const query = "SELECT * FROM employee_role";
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  })
+}
 
 const employeesByMan = () => {
 
@@ -136,16 +150,20 @@ const updateEmployeeManager = () => {
 const start = () => {
   inquirer.prompt({
     name: "initial",
+    pageSize: 30,
     message: "What would you like to do?",
     type: "list",
-    choices: ["View all employees", "View all employees by department", "View all employees by manager", "Add employee", "Delete employee", "Update employee role", "Update employee manager"]
+    choices: ["View all employees", "View all departments", "View all roles", "View all employees by manager", "Add employee", "Delete employee", "Update employee role", "Update employee manager"]
   }).then(answer => {
     switch(answer.initial){
       case "View all employees":
         allEmployees();
         break;
-      case "View all employees by department":
-        employeesByDep();
+      case "View all departments":
+        allDepartments();
+        break;
+      case "View all roles":
+        allRoles();
         break;
       case "View all employees by manager":
         employeesByMan();
