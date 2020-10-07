@@ -71,16 +71,16 @@ const addEmployee = () => {
       choices: ["Ron Swanson", "Leslie Knope", "Ben Wyatt", "Ann Perkins", "Chris Traeger" ]
     },
   ]).then(answer => {
-    // const role = answer.employeeRole
+    // here we are taking the users selection for role and grabbing the role id
     const getRoleId = `SELECT id FROM employee_role WHERE title = ${JSON.stringify(answer.employeeRole)}`
-    
+    // then make a connection to the db and set the id to a variable
     connection.query(getRoleId, (err,res) => {
       if (err) throw err;
       const roleId =res[0].id;
+      // then take the answers for all employee choices and insert into employee table
       const createEmployee = `INSERT INTO employee (first_name, last_name, role_id) VALUES (? , ?, ?);`;
       connection.query(createEmployee, [answer.firstName, answer.lastName, roleId],(err,res) => {
         if (err) throw err;
-       
         start();
       });
       
