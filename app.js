@@ -22,6 +22,21 @@ const allEmployees = () => {
   })
 };
 
+
+// function to grab roles from table to be used as choices in CLI when creating employee
+const employeeRoleChoice = () => {
+  const query = "SELECT title FROM employee_role";
+  let array= [];
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    res.forEach(title => array.push(title.title))
+
+  })
+  return array;
+  
+};
+
+
 const employeesByDep = () =>{
   const query = "SELECT"
 };
@@ -31,6 +46,7 @@ const employeesByMan = () => {
 };
 
 const addEmployee = () => {
+  
   inquirer.prompt([
     {
       name: 'firstName',
@@ -44,16 +60,17 @@ const addEmployee = () => {
     },
     {
       name:"employeeRole",
+      pageSize: 10,
       type: "list",
       message: "What is the employees role?",
-      choices: 
+      choices: employeeRoleChoice()
     },
     {
       name: "employeeManager",
       type: "list",
       message: "Who is this employees manager?",
       choices: ["Ron Swanson", "Leslie Knope", "Ben Wyatt", "Ann Perkins", "Chris Traeger" ]
-    }
+    },
   ]).then(answer => {
     const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`;
     connection.query(createEmployee, [answer.firstName, answer.lastName],(err,res) => {
