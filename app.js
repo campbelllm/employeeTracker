@@ -46,7 +46,6 @@ const employeesByMan = () => {
 };
 
 const addEmployee = () => {
-  
   inquirer.prompt([
     {
       name: 'firstName',
@@ -72,23 +71,33 @@ const addEmployee = () => {
       choices: ["Ron Swanson", "Leslie Knope", "Ben Wyatt", "Ann Perkins", "Chris Traeger" ]
     },
   ]).then(answer => {
-    const createEmployee = `INSERT INTO employee (first_name, last_name) VALUES (? , ?);`;
-    connection.query(createEmployee, [answer.firstName, answer.lastName],(err,res) => {
+    // const role = answer.employeeRole
+    const getRoleId = `SELECT id FROM employee_role WHERE title = ${JSON.stringify(answer.employeeRole)}`
+    
+    connection.query(getRoleId, (err,res) => {
       if (err) throw err;
-     
-      // start();
-    });
-    const setRole = "INSERT INTO employee_role (title) VALUES (?);";
-    connection.query(setRole, answer.employeeRole, (err, res) => {
-      if (err) throw err;
+      const roleId =res[0].id;
+      const createEmployee = `INSERT INTO employee (first_name, last_name, role_id) VALUES (? , ?, ?);`;
+      connection.query(createEmployee, [answer.firstName, answer.lastName, roleId],(err,res) => {
+        if (err) throw err;
+       
+        start();
+      });
       
-    });
-    const setManager = "INSERT INTO manager (manager) VALUES (?);";
-    connection.query(setManager, answer.employeeManager, (err, res) => {
-      if (err) throw err;
-     
-      start();
     })
+   
+   
+    // const setRole = "INSERT INTO employee_role (title) VALUES (?);";
+    // connection.query(setRole, answer.employeeRole, (err, res) => {
+    //   if (err) throw err;
+      
+    // });
+    // const setManager = "INSERT INTO manager (manager) VALUES (?);";
+    // connection.query(setManager, answer.employeeManager, (err, res) => {
+    //   if (err) throw err;
+     
+    //   start();
+    // })
     
   })
   
