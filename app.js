@@ -45,8 +45,16 @@ const employeeList = () => {
   });
   return nameArray;
 };
-
-
+// function to return employee departments for cli choices
+const departmentsChoice = () => {
+  const query = "SELECT name FROM department";
+  let array= [];
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    res.forEach(title => array.push(title.name))
+  })
+  return array;
+};
 
 const allDepartments = () =>{
   const query = "SELECT * FROM department";
@@ -119,7 +127,7 @@ const addDepartment = () => {
    {
     name:"newDepartment",
     type:"input",
-    message:"Enter name of new department",
+    message:"Enter name of new department:",
    },
   ]).then(answer => {
   const createDepartment = "INSERT INTO department (name) VALUES (?);";
@@ -131,7 +139,37 @@ const addDepartment = () => {
 };
 
 const addRole = () => {
-
+  inquirer.prompt([
+    {
+      name: "roleTitle",
+      type: "input",
+      message: "Enter title of new role:",
+    },
+    {
+      name: "roleSalary",
+      type: "input",
+      message: "Enter salary for new role:"
+    },
+    {
+      name: "department",
+      type: "list",
+      message: "Which deparment does this role fit in?",
+      choices: departmentsChoice()
+    }
+  ]).then(answer => {
+    const getDepartmentId = `SELECT id FROM employee_role WHERE title = ${JSON.stringify(answer.department)}`
+    // then make a connection to the db and set the id to a variable
+    connection.query(getDepartmentId, (err,res) => {
+      if (err) throw err;
+      const departmentId =res[0].id;
+      // then take the answers for all employee choices and insert into employee table
+      const createRole = "INSERT INTO employee_role (title, salary, department_id) VALUES (?, ?, ?);";
+      connection.query(createRole, [answer.roleTitle, answer.roleSalary, departmentId], (err, res) => {
+        if (err) throw err;
+        start();
+      })
+      });
+  });
 };
 
 const deleteEmployee = () => {
