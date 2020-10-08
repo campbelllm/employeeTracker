@@ -113,6 +113,26 @@ const addEmployee = () => {
   
 };
 
+const addDepartment = () => {
+  console.log('hi')
+ inquirer.prompt([
+   {
+    name:"newDepartment",
+    type:"input",
+    message:"Enter name of new department",
+   },
+  ]).then(answer => {
+  const createDepartment = "INSERT INTO department (name) VALUES (?);";
+  connection.query(createDepartment, answer.newDepartment, (err, res) => {
+    if (err) throw err;
+    start();
+  })
+})
+};
+
+const addRole = () => {
+
+};
 
 const deleteEmployee = () => {
   inquirer.prompt([
@@ -153,7 +173,7 @@ const start = () => {
     pageSize: 30,
     message: "What would you like to do?",
     type: "list",
-    choices: ["View all employees", "View all departments", "View all roles", "View all employees by manager", "Add employee", "Delete employee", "Update employee role", "Update employee manager"]
+    choices: ["View all employees", "View all departments", "View all roles", "View all employees by manager", "Add employee", "Add department", "Add role", "Delete employee", "Update employee role", "Update employee manager"]
   }).then(answer => {
     switch(answer.initial){
       case "View all employees":
@@ -171,6 +191,12 @@ const start = () => {
       case "Add employee":
         addEmployee();
         break;
+      case "Add department":
+        addDepartment();
+        break;
+      case "Add role":
+        addRole()
+        break;    
       case "Delete employee":
         deleteEmployee();
         break;
