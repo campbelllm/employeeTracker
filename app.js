@@ -157,7 +157,7 @@ const addRole = () => {
       choices: departmentsChoice()
     }
   ]).then(answer => {
-    const getDepartmentId = `SELECT id FROM employee_role WHERE title = ${JSON.stringify(answer.department)}`
+    const getDepartmentId = `SELECT id FROM department WHERE name = ${JSON.stringify(answer.department)}`
     // then make a connection to the db and set the id to a variable
     connection.query(getDepartmentId, (err,res) => {
       if (err) throw err;
