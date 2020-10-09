@@ -177,9 +177,7 @@ const deleteEmployee = () => {
     ///NEED TO FIGURE THIS OUT, why do I need a question in order for the second one to work
     {
       name: "confirmDelete",
-      type: "list",
-      message: "Are you sure you would like to delete an employee?",
-      choices: ['y','n']
+      message: "You will now be deleting an employee."
     },
     {
       type: 'list',
@@ -189,8 +187,8 @@ const deleteEmployee = () => {
       choices: employeeList()
     },
   ]).then(answer => {
-    const query = `DELETE FROM employee WHERE CONCAT(first_name, ' ', last_name) = ${JSON.stringify(answer.deleteName)}`
-    connection.query(query, (err,res) => {
+    const deleteQuery = `DELETE FROM employee WHERE CONCAT(first_name, ' ', last_name) = ${JSON.stringify(answer.deleteName)}`
+    connection.query(deleteQuery, (err,res) => {
       if (err) throw err;
       start();
     })
@@ -198,7 +196,39 @@ const deleteEmployee = () => {
 };
 
 const updateEmployeeRole = () => {
-
+  inquirer.prompt([
+    {
+      name: "roleUpdateConfirm",
+      message: "You are now updating the role for an employee."
+    },
+    {
+      type: 'list',
+      pageSize: 30,
+      name: "employeeName",
+      message: "Select employee that you will be updating role:",
+      choices: employeeList()
+    },
+    {
+      type: "list",
+      name: "newRole",
+      pageSize: 30,
+      message: "Please select new role:",
+      choices: employeeRoleChoice(),
+    }
+  ]).then(answer => {
+    // this gets the role id from user selection
+    const getRoleId = `SELECT id FROM employee_role WHERE title = ${JSON.stringify(answer.newRole)};`
+    connection.query(getRoleId, (err,res) => {
+      if (err) throw err;
+      const roleId = res[0].id;
+      console.log("THIS IS THE EMPLOYEE LIST OPTION___",answer.employeeList)
+      const newRoleQuery = `UPDATE employee SET role_id = ${roleId}  WHERE first_name = "Lindsey";`;
+      connection.query(newRoleQuery, (err, res) => {
+      if (err) throw err;
+      start();
+    })
+    })
+  })
 };
 
 const updateEmployeeManager = () => {
@@ -240,6 +270,7 @@ const start = () => {
         break;
       case "Update employee role":
         updateEmployeeRole();
+       
         break;
       case "Update employee manager":
         updateEmployeeManager();
