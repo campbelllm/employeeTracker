@@ -221,8 +221,10 @@ const updateEmployeeRole = () => {
     connection.query(getRoleId, (err,res) => {
       if (err) throw err;
       const roleId = res[0].id;
-      console.log("THIS IS THE EMPLOYEE LIST OPTION___",answer.employeeList)
-      const newRoleQuery = `UPDATE employee SET role_id = ${roleId}  WHERE first_name = "Lindsey";`;
+      const nameSplit = answer.employeeName.split(' ');
+      // const firstName = nameSplit[0];
+    
+      const newRoleQuery = `UPDATE employee SET role_id = ${roleId}  WHERE first_name = '${nameSplit[0]}' AND last_name = '${nameSplit[1]}'`;
       connection.query(newRoleQuery, (err, res) => {
       if (err) throw err;
       start();
