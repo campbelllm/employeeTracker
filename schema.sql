@@ -23,12 +23,11 @@ CREATE TABLE employee (
   id INT AUTO_INCREMENT,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
+  manager VARCHAR(30),
   role_id INT,
   manager_id INT, 
   PRIMARY KEY (id),
-  FOREIGN KEY (role_id) REFERENCES employee_role(id),
-  FOREIGN KEY (manager_id) REFERENCES employee(id)
-
+  FOREIGN KEY (role_id) REFERENCES employee_role(id)
 );
 
 INSERT INTO department(id, name) 
@@ -50,4 +49,6 @@ VALUES (1, "Accountant", 80000, 1),
        (8, "Junior Developer", 60000, 4),
        (9, "Manager", 150000, 5);
 
-      
+INSERT INTO employee (first_name, last_name, manager, role_id, manager_id)
+VALUES ("Ron", "Swanson", 9, 1),
+       ("Leslie", "Knope", "Ron Swanson", 9, 1);   
